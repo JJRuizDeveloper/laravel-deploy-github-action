@@ -1,0 +1,38 @@
+name: Sharedhosting deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del repositorio
+      uses: actions/checkout@v2
+
+    - name: Configurar entorno PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2.6'
+
+   # - name: Install dependencies
+   #   run: composer install --no-dev --prefer-dist --no-scripts --no-progress --no-suggest
+
+   # - name: Configure env
+    #  env:
+     #   FTP_HOST: ${{ secrets.FTP_HOST }}
+      #  FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+       # FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        #FTP_DESTINATION: ${{ secrets.FTP_DESTINATION }}
+      #run: php artisan config:cache
+
+    - name: Deploy to shared hosting
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ${{ secrets.FTP_DESTINATION }}
